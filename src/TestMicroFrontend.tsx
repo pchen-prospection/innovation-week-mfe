@@ -1,50 +1,27 @@
-import '@webcomponents/webcomponentsjs';
+// @ts-ignore
+// eslint-disable-next-line import/no-extraneous-dependencies
+import reactToWebComponent from 'react-to-webcomponent';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 import React from 'react';
+import PropTypes from 'prop-types';
 import theme from './theme';
 import GlobalStyle from './GlobalStyles';
 import App from './App';
 
-const createElement = ({ helloText }: {helloText: string}) => React.createElement(
-  () => (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App helloText={helloText} />
-    </ThemeProvider>
-  ),
+const TestMicroFrontend = ({ text }: {text: string}) => (
+  <ThemeProvider theme={theme}>
+    <GlobalStyle />
+    <App helloText={text} />
+  </ThemeProvider>
 );
 
-export default class TestMicroFrontend extends HTMLElement {
-  private readonly appContainer: HTMLDivElement;
+TestMicroFrontend.propTypes = {
+  text: PropTypes.string.isRequired,
+};
 
-  constructor() {
-    super();
-    const app = document.getElementsByTagName('test-microfrontend')[0];
-    this.appContainer = document.createElement('div');
-    this.appContainer.setAttribute('id', 'test-microfrontend');
-    app.appendChild(this.appContainer);
-  }
-
-  connectedCallback() {
-    const helloText = this.getAttribute('hello-text') || '';
-    ReactDOM.render(
-      createElement({ helloText }),
-      document.getElementsByTagName('test-microfrontend')[0],
-    );
-  }
-
-  static get observedAttributes() {
-    return ['hello-text'];
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === 'hello-text') {
-      ReactDOM.render(createElement({ helloText: newValue }), document.getElementsByTagName('test-microfrontend')[0]);
-    }
-  }
-}
+const WebTestMicroFrontend = reactToWebComponent(TestMicroFrontend, React, ReactDOM);
 
 if (!window.customElements.get('test-microfrontend')) {
-  window.customElements.define('test-microfrontend', TestMicroFrontend);
+  window.customElements.define('test-microfrontend', WebTestMicroFrontend);
 }
