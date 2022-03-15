@@ -19,7 +19,8 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "declaration": true
   },
   "include": ["src", "./custom.d.ts"],
   "exclude": ["node_modules"]

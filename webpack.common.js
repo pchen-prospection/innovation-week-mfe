@@ -6,7 +6,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
-  output: { path: path.join(__dirname, 'dist'), filename: 'bundle.[fullhash].js' },
+  output: { path: path.join(__dirname, 'dist'), filename: '[name].[chunkhash].js' },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
     modules: [path.resolve('./src'), path.resolve('./node_modules')],
@@ -42,6 +42,6 @@ module.exports = {
       template: path.join(__dirname, 'src', 'index.html'),
     }),
     new CleanWebpackPlugin(),
-    new WebpackManifestPlugin({ publicPath: '' }),
+    new WebpackManifestPlugin({ publicPath: '', filter: (file) => file.name !== 'index.html' }),
   ],
 };

@@ -3,5 +3,11 @@ const { merge } = require('webpack-merge');
 const local = require('./webpack.local');
 
 module.exports = merge(local, {
-  entry: './src/TestMicroFrontend.tsx',
+  entry: {
+    index: {
+      import: './src/TestMicroFrontend.tsx',
+      dependOn: 'shared',
+    },
+    shared: ['react-dom', 'react'],
+  },
 });
